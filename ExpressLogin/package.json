@@ -1,25 +1,22 @@
 {
-  "name": "package.json",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "expresslogin",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
-  "author": "ajimu",
-  "license": "ISC",
   "dependencies": {
     "body-parser": "latest",
-    "cookie-parser": "latest",
+    "cookie-parser": "~1.4.4",
     "cors": "latest",
-    "debug": "latest 3.1.0",
+    "debug": "~2.6.9",
     "ejs": "latest",
-    "express": "latest",
+    "express": "~4.16.1",
     "express-session": "latest",
-    "http-error": "latest",
-    "morgan": "latest",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.1",
     "pg": "latest",
-    "pug": "^3.0.2",
     "session-file-store": "latest"
   }
 }
