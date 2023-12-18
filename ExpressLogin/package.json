@@ -1,0 +1,25 @@
+{
+  "name": "package.json",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ajimu",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "latest",
+    "cookie-parser": "latest",
+    "cors": "latest",
+    "debug": "latest 3.1.0",
+    "ejs": "latest",
+    "express": "latest",
+    "express-session": "latest",
+    "http-error": "latest",
+    "morgan": "latest",
+    "pg": "latest",
+    "pug": "^3.0.2",
+    "session-file-store": "latest"
+  }
+}
