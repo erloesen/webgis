@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+		<script src="https://unpkg.com/popper.js@1.14.1/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+		<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	   	
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+		
+		<!-- Latest compiled and minified Locales -->
+		<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/locale/bootstrap-table-zh-CN.min.js"></script>   
+	    <script type="text/javascript" src="../public/javascripts/bootstrap-table-export.js" ></script>
+	    
+	    <!-- Load Leaflet from CDN -->
+	    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+	    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+	    crossorigin=""/>
+	    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+	    integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+	    crossorigin=""></script>
+	    
+	    <!-- Load html map css -->
+	    <link rel="stylesheet" href="../stylesheets/leafletAPI.css" />
+	    <link rel="stylesheet" href="../stylesheets/leaflet-search.css" />
+	    <link rel="stylesheet" href="../stylesheets/leaflet-search.mobile.css" />
+	    <!-- Load LeafletMap JavaScript self-->
+		<script type="text/javascript" src="../javascripts/LeafletMap.js" ></script>		
+	    <!-- Load ChineseTmsProviders JavaScript plugins-->
+	    <script type="text/javascript" src="../javascripts/leaflet.ChineseTmsProviders.js" ></script>
+		<!--Load leaflet-search.js JavaScript -->
+		<script type="text/javascript" src="../javascripts/leaflet-search.js" ></script>
+		<script type="text/javascript" src="../javascripts/echarts.min.js"></script>
+
+
+	<title><%= title %></title>
+</head>
+
+<body onload="init()">
