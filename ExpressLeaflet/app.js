@@ -9,6 +9,9 @@ var users = require('./routes/users');
 var session=require('express-session');
 var app = express();
 
+// 本服务器的跨域，跨个屁是同源的
+// const cors = require('cors')
+// app.use(cors())
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -38,7 +41,7 @@ app.use('/users', users);
 app.get('/jsonp',function(req,res,next){  //返回jsonp
    res.jsonp({status:'jsonp'});
 });
- 
+
 app.get('/json',function(req,res,next){   //返回json
     res.send({status:'json'});
 });
@@ -49,6 +52,8 @@ app.use(function(req, res, next) {
     err.status = 404;
     next(err);
 });
+
+
 // error handlers
 // development error handler
 // will print stacktrace
