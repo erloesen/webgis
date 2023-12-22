@@ -33,22 +33,114 @@ function init(){
 
 	// 专题数据
 
-	var urljson = "http://localhost:8080/geoserver/LightWebGIS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=LightWebGIS%3Acompany_polygon_relation&maxFeatures=50&outputFormat=application%2Fjson"
-	var Search_FacGeoJSON = L.geoJson(null, {
-		onEachFeature: function(feature, marker) {
-				marker.bindPopup('<h4>'+'工厂：'+ feature.properties.name+'<br/>id：'+feature.properties.id);
-		}
+	var urljson = "http://localhost:8080/geoserver/LightWebGIS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=LightWebGIS%3Acompany_polygon_relation&maxFeatures=500&outputFormat=application%2Fjson"
+	// var Search_FacGeoJSON = L.geoJson(null, {
+	// 	onEachFeature: function(feature, marker) {
+	// 			marker.bindPopup('<h4>'+'工厂：'+ feature.properties.name+'<br/>id：'+feature.properties.id);
+	// 	}
+	// }).addTo(map);
+	// //ajax调用
+	// $.ajax({
+	// 	url: urljson, //GeoJSON服务的完整路径
+	// 	dataType: 'json',
+	// 	outputFormat: 'text/javascript',
+	// 	success: function(data) {
+	// 		Search_FacGeoJSON.addData(data);
+	// 	},
+	// });
+
+	// 点击地图响应函数
+	function onEachFeature(feature, marker) {
+		var pid = feature.properties.polygon_id;
+		var content = '<div style="width:600px;height:320px;" id="popupwindow"</div>';
+		marker.bindPopup(content, {maxWidth:800});
+		marker.on('popupopen', function(e) {
+			var myChart = echarts.init(document.getElementById('popupwindow'));
+			getDatabyid(pid, myChart)
+		});
+	}
+
+	function getDatabyid(pid, myChart) {
+		var xValue = [];
+		var yValue = [];
+		$.ajax({
+			url: '/popquery?pid='+pid,
+			type: 'get',
+			dataType: 'json',
+			outputFormat: 'text/javascript',
+			success: function(result) {
+				if (result) {
+					for (var i=0; i<result.length; i++) {
+						xValue.push(result[i].date);
+						yValue.push(result[i].last_cur_daytime_count)
+					}
+					var facname = result[0].name;
+					getChart(xValue, yValue, myChart, facname)
+				}
+			},
+			error: function (data) {
+				alert('error::'+data[0]+'--图表请求数据失败')
+			}
+		})
+	}
+
+	function getChart(xValue, yValue, myChart, facname){
+		console.log("xValue:"+xValue);
+		console.log("yValue:"+yValue);
+		var option = {
+			title: {
+				text: facname+'日工作人口',
+			},
+			color: ['#3398D8'],
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {
+					type: 'shadow'
+				}
+			},
+			grid: {
+				left: '3%',
+				right: '4%',
+				bottom: '3%',
+				containLabel: true
+			},
+			xAxis:[
+				{
+					data: xValue
+				}
+			],
+			yAxis: [{}],
+			series: [{
+				type: 'line',
+				showSymbol: false,
+				data: yValue,
+				itemStyle: {
+					nromal: {
+						label: {
+							show: true
+						}
+					}
+				}
+			}]
+		};
+
+		myChart.clear();
+		myChart.setOption(option);
+	}
+
+
+
+	var Pop_FacGeoJSON = L.geoJson(null, {
+		onEachFeature: onEachFeature
 	}).addTo(map);
-	//ajax调用
 	$.ajax({
-		url: urljson, //GeoJSON服务的完整路径
+		url: urljson,
 		dataType: 'json',
 		outputFormat: 'text/javascript',
 		success: function(data) {
-			Search_FacGeoJSON.addData(data);
-		},
-	});
-
+			Pop_FacGeoJSON.addData(data)
+		}
+	})
 
 	var url = 'http://localhost:8080/geoserver/LightWebGIS/wms'
 	const tifLayer = L.tileLayer.wms(url, {
@@ -70,7 +162,7 @@ function init(){
 	//定义专题图层
 	var overlayMaps = {
 		"北京汽车": tifLayer,
-		"全部新能源": Search_FacGeoJSON
+		"全部新能源": Pop_FacGeoJSON
 	};
 	//加载底图与专题图层控件
 	L.control.layers(baseMaps, overlayMaps).addTo(map);
@@ -83,9 +175,33 @@ function init(){
 		//搜索提示Tips
 		textPlaceholder:'地名查询...',
 		propertyLoc: ['lat','lon'],
-		marker: L.circleMarker([0,0],{radius:10}),
+		marker: L.circleMarker([0,0], {radius:10}),
 		autoCollapse: true,
 		autoType: false,
 		minLength: 2
 	}) );
+
+	// 定义搜索控件
+	var searchControl = new L.Control.Search({
+		layer: Pop_FacGeoJSON,
+		propertyName:'name',
+		textPlaceholder:'地图要素搜索...',
+		marker:false,
+		moveToLocation: function(latlng, title, map) {
+			// var zoom = map.getBoundsZoom(latlng.layer.getBounds)
+			// map.setView(latlng, zoom);
+			map.fitBounds(latlng.layer.getBounds(), {maxZoom:17})
+		}
+	});
+
+	// 搜索响应函数
+	searchControl.on('search:locationfound', function(e) {
+		e.layer.setStyle({fillColor: '#3f0', color: '#0f0'});
+	}).on('search:collapsed', function (e) {
+		Search_FacGeoJSON.eachLayer(function(layer) {
+			Search_FacGeoJSON.resetStyle(layer);
+		});
+	});
+	map.addControl(searchControl)
+
 }

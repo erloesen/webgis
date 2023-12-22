@@ -68,7 +68,7 @@ router.route('/reg')
         res.render('reg',{title:'注册'});
     })
     .post(function(req,res) {
-        //调用数据库管理类中的写入语句，参数是表名userinfo，username、password、emal、telephone
+        //调用数据库管理类中的写入语句，参数是表名userinfo，username、password、email、telephone
 		pgclient.save('userinfo',{'username': req.body.username,'password': req.body.password2,'email': req.body.email,'telephone': req.body.telephone}, function (err) {
             pgclient.select('userinfo',{'username': req.body.username},'', function (result) {
 				if(result[0]===undefined){
@@ -81,20 +81,17 @@ router.route('/reg')
         });
     });
 
-//添加关联字段查询省GDP表的路由
-router.get('/GDPQuery', function(req, res) {
-    var code = req.query.code;
-    console.log('路由中的code::::::'+code);
-	pgclient.selectpolygon_gdpByCode('polygon_gdp', code,'', function(result) {
-        //console.log('路由中的data::::::'+data[0].GDP);
-		if(result[0] === undefined) {
-			res.send('返回空值');
-		} else {
-            //res.render("echartsdb", {title: '省GDP查询', datas: result}); //直接跳转
-            res.send(result);
-			console.log("返回结果：" + JSON.stringify(result))
-		}
-	});
+//添加关联字段查询工厂人口
+router.get('/popquery', function(req, res) {
+        var pid = req.query.pid;
+        pgclient.selectFacPop_BypolygonId('raw_mobile', pid, '', function(result) {
+            if(result[0] === undefined) {
+                res.send('返回空值');
+            } else {
+                res.send(result);
+                console.log("返回结果：" + JSON.stringify(result))
+            }
+        });
 
 });
 
